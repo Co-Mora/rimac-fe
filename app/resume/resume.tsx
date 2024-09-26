@@ -3,10 +3,11 @@
 import { NavBar } from '@rimac/components/nav-bar';
 import { Step } from '@rimac/components/step';
 import useLocalStorage from '@rimac/hooks/use-local-storage';
+import { IUser } from '@rimac/types';
 import { User2 } from 'lucide-react';
 
-export default function Resume({ user }: any) {
-  const [value, _] = useLocalStorage('user', '');
+export default function Resume({ user }: { user: IUser }) {
+  const [value] = useLocalStorage('user', '');
 
   return (
     <div className="min-h-screen bg-gray-50">

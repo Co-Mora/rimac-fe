@@ -44,7 +44,7 @@ interface SignInFormProps {
   onSubmit: (
     data: z.output<Required<typeof GetQuoteFormSchema>>,
     reset: () => void
-  ) => NonNullable<unknown>;
+  ) => void;
 }
 
 export const InsuranceForm: React.FC<SignInFormProps> = memo(
@@ -68,7 +68,7 @@ export const InsuranceForm: React.FC<SignInFormProps> = memo(
       resolver: zodResolver(GetQuoteFormSchema),
     });
     console.log('errors', errors);
-    const onSubmitForm: SubmitHandler<any> = (
+    const onSubmitForm: SubmitHandler<z.infer<typeof GetQuoteFormSchema>> = (
       data: z.infer<typeof GetQuoteFormSchema>
     ) => onSubmit(data, reset);
 
@@ -186,3 +186,5 @@ export const InsuranceForm: React.FC<SignInFormProps> = memo(
     );
   }
 );
+
+InsuranceForm.displayName = 'InsuranceForm';

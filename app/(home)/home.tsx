@@ -6,32 +6,28 @@ import { NavBar } from '@rimac/components/nav-bar';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import useLocalStorage from '@rimac/hooks/use-local-storage';
+import { IUserForm } from '@rimac/types';
 
 export default function Home() {
   const [loading, setLoading] = React.useState(false);
-  const [_, setValue] = useLocalStorage('user', '');
+  const [value, setValue] = useLocalStorage('user', '');
 
   const appRouter = useRouter();
   const handleSignInForm = React.useCallback(
-    (
-      data: Required<any>,
-      reset: () => unknown
-    ): NonNullable<Record<'message', string> | boolean> => {
-      try {
-        const { acceptTerm, acceptCommunication, ...info } = data;
-        setValue(info);
-        setLoading(true);
-        setTimeout(() => {
-          reset();
-          appRouter.push('/plan');
-          setLoading(false);
-        }, 500);
-        return true;
-      } catch (err: unknown) {
-        return { message: '' };
-      }
+    (data: Required<IUserForm>, reset: () => unknown) => {
+      setValue({
+        ...value,
+        cellphone: data.cellphone,
+        documentId: data.documentId,
+      });
+      setLoading(true);
+      setTimeout(() => {
+        reset();
+        appRouter.push('/plan');
+        setLoading(false);
+      }, 500);
     },
-    [appRouter]
+    [appRouter, setValue, value]
   );
 
   return (

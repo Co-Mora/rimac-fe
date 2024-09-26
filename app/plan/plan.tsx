@@ -19,20 +19,14 @@ import { HomeLight, HospitalLight } from '@rimac/components/icons';
 import { Footer } from '@rimac/components/footer';
 import { useRouter } from 'next/navigation';
 import useLocalStorage from '@rimac/hooks/use-local-storage';
-
-interface IPlanData {
-  name: string;
-  price: number;
-  description: Array<string>[];
-  age: number;
-}
+import { IPlanData } from '@rimac/types';
 
 const getAge = (birthDate: string) =>
   Math.floor(
-    ((new Date() as any) - new Date(birthDate).getTime()) / 3.15576e10
+    ((new Date() as never) - new Date(birthDate).getTime()) / 3.15576e10
   );
 
-function Plan({ data }: any) {
+function Plan({ data }: { data: IPlanData[] }) {
   const [selectedOption, setSelectedOption] = React.useState<string | null>(
     'for-me'
   );
@@ -49,10 +43,23 @@ function Plan({ data }: any) {
     } else {
       setFilteredPlans(plans);
     }
-  }, [plans, userAge, selectedOption]);
+  }, [plans, userAge, selectedOption, data]);
 
   const applyDiscount = (price: number) => {
     return selectedOption === 'for-someone' ? price * 0.95 : price;
+  };
+
+  const handleSelectPlan = (plan: IPlanData) => {
+    const { name, price } = plan;
+    const data = {
+      ...value,
+      info: {
+        name,
+        price,
+      },
+    };
+    setValue(data);
+    appRouter.replace('/resume');
   };
 
   return (
@@ -166,15 +173,7 @@ function Plan({ data }: any) {
                 <CardFooter>
                   <Button
                     id={plan.name.split(' ').join('-')}
-                    onClick={() => {
-                      const { age, description, ...info } = plan;
-                      const data = {
-                        ...value,
-                        info,
-                      };
-                      setValue(data);
-                      appRouter.replace('/resume');
-                    }}
+                    onClick={() => handleSelectPlan(plan)}
                     className="w-full bg-red-600 hover:bg-red-700 font-bold text-white rounded-full"
                   >
                     Seleccionar Plan
