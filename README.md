@@ -1,5 +1,7 @@
 # Rimac App
 
+Demo: https://rimac-fe-5au9.vercel.app/
+
 ## Getting Started
 
 First, run the development server:
