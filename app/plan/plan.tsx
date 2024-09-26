@@ -50,12 +50,12 @@ function Plan({ data }: { data: IPlanData[] }) {
   };
 
   const handleSelectPlan = (plan: IPlanData) => {
-    const { name, price } = plan;
+    const { name } = plan;
     const data = {
       ...value,
       info: {
         name,
-        price,
+        price: applyDiscount(plan.price).toFixed(2),
       },
     };
     setValue(data);
