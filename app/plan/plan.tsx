@@ -18,6 +18,7 @@ import { Header } from './_components/header';
 import { HomeLight, HospitalLight } from '@rimac/components/icons';
 import { Footer } from '@rimac/components/footer';
 import { useRouter } from 'next/navigation';
+import useLocalStorage from '@rimac/hooks/use-local-storage';
 
 interface IPlanData {
   name: string;
@@ -37,6 +38,7 @@ function Plan({ data }: any) {
   );
   const [plans, setPlans] = React.useState<IPlanData[]>([]);
   const [filteredPlans, setFilteredPlans] = React.useState<IPlanData[]>([]);
+  const [value, setValue] = useLocalStorage('user');
   const userAge = getAge('02-04-1990');
   const appRouter = useRouter();
 
@@ -163,7 +165,16 @@ function Plan({ data }: any) {
                 </CardContent>
                 <CardFooter>
                   <Button
-                    onClick={() => appRouter.replace('/resume')}
+                    id={plan.name.split(' ').join('-')}
+                    onClick={() => {
+                      const { age, description, ...info } = plan;
+                      const data = {
+                        ...value,
+                        info,
+                      };
+                      setValue(data);
+                      appRouter.replace('/resume');
+                    }}
                     className="w-full bg-red-600 hover:bg-red-700 font-bold text-white rounded-full"
                   >
                     Seleccionar Plan

@@ -5,9 +5,12 @@ import { InsuranceForm } from '@rimac/components/insurance-form';
 import { NavBar } from '@rimac/components/nav-bar';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import useLocalStorage from '@rimac/hooks/use-local-storage';
 
 export default function Home() {
   const [loading, setLoading] = React.useState(false);
+  const [_, setValue] = useLocalStorage('user', '');
+
   const appRouter = useRouter();
   const handleSignInForm = React.useCallback(
     (
@@ -15,7 +18,8 @@ export default function Home() {
       reset: () => unknown
     ): NonNullable<Record<'message', string> | boolean> => {
       try {
-        console.log('data', data);
+        const { acceptTerm, acceptCommunication, ...info } = data;
+        setValue(info);
         setLoading(true);
         setTimeout(() => {
           reset();

@@ -2,9 +2,12 @@
 
 import { NavBar } from '@rimac/components/nav-bar';
 import { Step } from '@rimac/components/step';
+import useLocalStorage from '@rimac/hooks/use-local-storage';
 import { User2 } from 'lucide-react';
 
 export default function Resume({ user }: any) {
+  const [value, _] = useLocalStorage('user', '');
+
   return (
     <div className="min-h-screen bg-gray-50">
       <NavBar />
@@ -20,20 +23,21 @@ export default function Resume({ user }: any) {
             <User2 className="w-10 h-10 rounded-full mr-4" />
             <div>
               <p className="font-semibold">{user.name + ' ' + user.lastName}</p>
-              <p className="text-sm text-gray-600">DNI: 45353525</p>
+              <p className="text-sm text-gray-600">DNI: {value.documentId}</p>
             </div>
           </div>
           <div className="mt-4">
             <p className="text-sm">
               <span className="font-semibold">Responsable de pago:</span> DNI:
-              45353525
+              {value.documentId}
             </p>
             <p className="text-sm">
-              <span className="font-semibold">Plan elegido:</span> Plan en Casa
-              y Clínica
+              <span className="font-semibold">Plan elegido:</span>{' '}
+              {value.info.name}
             </p>
             <p className="text-sm">
-              <span className="font-semibold">Costo del plan:</span> $99 al mes
+              <span className="font-semibold">Costo del plan:</span> $
+              {value.info.price} al mes
             </p>
           </div>
         </div>

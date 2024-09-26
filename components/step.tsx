@@ -7,6 +7,7 @@ export const Step = ({ step }: { step: number }) => {
   const appRouter = useRouter();
 
   const backButton = () => {
+    window.localStorage.removeItem('user');
     appRouter.back();
   };
 

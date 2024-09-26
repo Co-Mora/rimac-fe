@@ -22,8 +22,8 @@ import { twJoin } from 'tailwind-merge';
 export const GetQuoteFormSchema: ZodType<{
   documentId: string;
   cellphone: string;
-  acceptTerm: unknown;
-  acceptCommunication: unknown;
+  acceptTerm: string;
+  acceptCommunication: string;
 }> = z.object({
   documentId: z.string({
     required_error: 'El documento ingresado no es válido',
@@ -31,8 +31,12 @@ export const GetQuoteFormSchema: ZodType<{
   cellphone: z.string({
     required_error: 'El celular ingresado no es válido',
   }),
-  acceptTerm: z.string().transform((value) => value === 'on'),
-  acceptCommunication: z.string().transform((value) => value === 'on'),
+  acceptTerm: z
+    .string()
+    .refine((value) => value === 'on', 'Debes acordar de las condiciones'),
+  acceptCommunication: z
+    .string()
+    .refine((value) => value === 'on', 'Debes acordar de las condiciones'),
 });
 
 interface SignInFormProps {
@@ -49,14 +53,15 @@ export const InsuranceForm: React.FC<SignInFormProps> = memo(
     const {
       register,
       handleSubmit,
+      setValue,
       formState: { errors },
       reset,
     } = useForm<z.output<typeof GetQuoteFormSchema>>({
       defaultValues: {
         documentId: '',
         cellphone: '',
-        acceptTerm: '',
-        acceptCommunication: '',
+        acceptTerm: 'off',
+        acceptCommunication: 'off',
       },
       mode: 'onSubmit',
       reValidateMode: 'onChange',
@@ -150,12 +155,26 @@ export const InsuranceForm: React.FC<SignInFormProps> = memo(
         />
 
         <div className="space-x-2 flex items-center">
-          <Checkbox checked={false} />
-          <Label>Acepto la Política de Privacidad</Label>
+          <Checkbox
+            onCheckedChange={() => {
+              setValue('acceptTerm', 'on', { shouldValidate: true });
+            }}
+            {...register('acceptTerm')}
+          />
+          <Label className={clsx(errors.acceptTerm && 'text-red-600')}>
+            Acepto la Política de Privacidad
+          </Label>
         </div>
         <div className="space-x-2 flex items-center">
-          <Checkbox />
-          <Label>Acepto la Política Comunicaciones Comerciales</Label>
+          <Checkbox
+            onCheckedChange={() => {
+              setValue('acceptCommunication', 'on', { shouldValidate: true });
+            }}
+            {...register('acceptCommunication')}
+          />
+          <Label className={clsx(errors.acceptCommunication && 'text-red-600')}>
+            Acepto la Política Comunicaciones Comerciales
+          </Label>
         </div>
         <Button form="form" size="lg" variant="secondary" type="submit">
           {Boolean(nextLoading) && (
