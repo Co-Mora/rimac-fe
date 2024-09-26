@@ -37,7 +37,7 @@ export default function Home() {
         width={432}
         height={656}
         alt="molecule-blur"
-        className="absolute bottom-0 left-0"
+        className="absolute bottom-10 left-0"
       />
       <Image
         src="/blur-asset.png"

@@ -1,5 +1,9 @@
 import Resume from './resume';
 
-export default function Page() {
-  return <Resume />;
+export default async function Page() {
+  const res = await fetch(
+    'https://rimac-front-end-challenge.netlify.app/api/user.json'
+  );
+  const user: any = await res.json();
+  return <Resume user={user} />;
 }

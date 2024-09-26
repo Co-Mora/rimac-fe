@@ -5,5 +5,5 @@ export default async function Page() {
     'https://rimac-front-end-challenge.netlify.app/api/plans.json'
   );
   const plans: any = await res.json();
-  return <Plan plans={plans.list} />;
+  return <Plan data={plans.list} />;
 }
